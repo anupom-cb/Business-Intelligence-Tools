@@ -1,0 +1,359 @@
+table Orders
+	lineageTag: 43953ae0-00de-5331-b7ac-46f9269e2740
+
+	measure 'Total Sales' = SUM(Orders[Sales])
+		formatString: $#,0
+		displayFolder: 1 Base KPIs
+		lineageTag: 2f392849-4d41-5c99-b24a-387bbe4374e7
+
+	measure 'Total Profit' = SUM(Orders[Profit])
+		formatString: $#,0
+		displayFolder: 1 Base KPIs
+		lineageTag: 3c51e433-3f4b-596f-9560-1422963ee3d2
+
+	measure 'Total Orders' = DISTINCTCOUNT(Orders[Order ID])
+		formatString: #,0
+		displayFolder: 1 Base KPIs
+		lineageTag: 87174cc1-d3aa-5e19-a402-55c51871c4a2
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Sales])
+		formatString: 0.0%
+		displayFolder: 1 Base KPIs
+		lineageTag: 4de679f0-cbbe-5e28-b584-ea5e8eb7b9df
+
+	measure 'Total Customers' = DISTINCTCOUNT(Orders[Customer Name])
+		formatString: #,0
+		displayFolder: 1 Base KPIs
+		lineageTag: f7c07955-6801-5f84-b1da-404449250d9b
+
+	measure 'Sales Top 10 Customers' =
+			VAR _rank = RANKX(ALLSELECTED(Orders[Customer Name]), [Total Sales], , DESC, Dense)
+			RETURN IF(_rank <= 10, [Total Sales])
+		formatString: $#,0
+		displayFolder: 2 Chart helpers
+		lineageTag: 154a72c8-ef2e-59f5-afc4-eb048ea58a81
+
+	measure 'SC Sales Actual' = CALCULATE([Total Sales], REMOVEFILTERS(Orders[Category]))
+		formatString: $#,0
+		displayFolder: 3 Scorecard
+		lineageTag: 3cf31cbb-7084-5229-99d5-6b259c7cfb5a
+
+	measure 'SC Profit Actual' = CALCULATE([Total Profit], REMOVEFILTERS(Orders[Category]))
+		formatString: $#,0
+		displayFolder: 3 Scorecard
+		lineageTag: d91779f3-caf4-5382-bd65-03443c402221
+
+	measure 'SC Orders Actual' = CALCULATE([Total Orders], REMOVEFILTERS(Orders[Category]))
+		formatString: #,0
+		displayFolder: 3 Scorecard
+		lineageTag: 3af690cb-721e-539c-8828-05146149a201
+
+	measure 'SC Sales Target' =
+			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
+			VAR _years = VALUES(Calendar[Year])
+			RETURN
+			    CALCULATE(
+			        SUM(Targets[Sales Target]),
+			        TREATAS(_regions, Targets[Region]),
+			        TREATAS(_years, Targets[Year])
+			    )
+		formatString: $#,0
+		displayFolder: 3 Scorecard
+		lineageTag: eaad1e8d-fbba-5457-ae34-7b67f118ded4
+
+	measure 'SC Profit Target' =
+			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
+			VAR _years = VALUES(Calendar[Year])
+			RETURN
+			    CALCULATE(
+			        SUM(Targets[Profit Target]),
+			        TREATAS(_regions, Targets[Region]),
+			        TREATAS(_years, Targets[Year])
+			    )
+		formatString: $#,0
+		displayFolder: 3 Scorecard
+		lineageTag: 07f634c4-d81f-597d-8b91-5bf83cba8136
+
+	measure 'SC Orders Target' =
+			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
+			VAR _years = VALUES(Calendar[Year])
+			RETURN
+			    CALCULATE(
+			        SUM(Targets[Orders Target]),
+			        TREATAS(_regions, Targets[Region]),
+			        TREATAS(_years, Targets[Year])
+			    )
+		formatString: #,0
+		displayFolder: 3 Scorecard
+		lineageTag: 9951bc5f-8a87-55c1-af87-9f09114de1b7
+
+	measure 'SC Sales Ach %' =
+			VAR _a = [SC Sales Actual]
+			VAR _t = [SC Sales Target]
+			RETURN
+			    IF(ISBLANK(_t), BLANK(),
+			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
+		formatString: 0.0%
+		displayFolder: 3 Scorecard
+		lineageTag: 9c638be0-5a10-5728-9e0d-e558f1429b4e
+
+	measure 'SC Profit Ach %' =
+			VAR _a = [SC Profit Actual]
+			VAR _t = [SC Profit Target]
+			RETURN
+			    IF(ISBLANK(_t), BLANK(),
+			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
+		formatString: 0.0%
+		displayFolder: 3 Scorecard
+		lineageTag: 4876b90a-9774-54a0-bdb6-fc7d4f9263df
+
+	measure 'SC Orders Ach %' =
+			VAR _a = [SC Orders Actual]
+			VAR _t = [SC Orders Target]
+			RETURN
+			    IF(ISBLANK(_t), BLANK(),
+			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
+		formatString: 0.0%
+		displayFolder: 3 Scorecard
+		lineageTag: 1210f4bb-4a0f-5b7f-a34b-6b5d7b5027b5
+
+	measure 'SC Sales Color' =
+			VAR _x = [SC Sales Ach %]
+			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
+		displayFolder: 3 Scorecard
+		lineageTag: 24e52913-3c2c-5713-bdfb-33a402cac914
+
+	measure 'SC Profit Color' =
+			VAR _x = [SC Profit Ach %]
+			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
+		displayFolder: 3 Scorecard
+		lineageTag: d167f0d1-5f7e-55c0-978a-e4977e4e188a
+
+	measure 'SC Orders Color' =
+			VAR _x = [SC Orders Ach %]
+			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
+		displayFolder: 3 Scorecard
+		lineageTag: 8a3de8cb-6b35-5165-b4e2-098b47ae09b9
+
+	measure 'Threshold Achieved' = 1
+		formatString: 0%
+		displayFolder: 3 Scorecard
+		lineageTag: 2c59251d-b65f-5f2b-88a3-dc3d54c4ed30
+
+	measure 'Threshold Partial' = 0.8
+		formatString: 0%
+		displayFolder: 3 Scorecard
+		lineageTag: b9f3d603-de1c-58e8-8c36-318b8be53ba8
+
+	column 'Row ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 44cb0e6b-6d89-52e8-9e94-de96618a9800
+		summarizeBy: none
+		sourceColumn: Row ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 2ccd52a5-fc4b-5256-b9da-4d6ab9fac9c0
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 60c29582-33e1-5277-aae8-ed6a65f447cc
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8169df36-1664-5af0-94e1-24ac50fac266
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: 46b4d0b9-0b95-5073-8a9b-9281e9b80570
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: e09dddfc-3885-52fe-9e19-67d63faeeca9
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 09ab26fc-20a0-5f70-8174-51750b0f412f
+		summarizeBy: none
+		sourceColumn: Customer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 0bc4e82f-cc22-5e30-acc5-90127dc238d2
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Postal Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: d0fd453a-5e12-545a-9996-bd6d0e2a38e4
+		summarizeBy: none
+		sourceColumn: Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: f91007cf-53bb-547e-9b0c-6c7e649ae925
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 7503dec5-921f-55c4-badc-2310eab88198
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: da4c9621-ec42-5ace-8581-ea5e1e2e2602
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		dataType: string
+		lineageTag: 068160ce-82e7-5c3e-9d09-028d8f251256
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: 9b8a5871-aafd-5d30-923a-359d58a34bbc
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 21ecc4a0-0344-58a7-9db1-ffbaec35475f
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 8157308f-35d8-533c-832c-f85f409a4396
+		summarizeBy: none
+		sourceColumn: Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sub-Category'
+		dataType: string
+		lineageTag: bd7bad9f-9d9e-50a2-908b-9261cb674f7f
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: e8a55f57-e574-5596-891c-3f8b799476a4
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: 48736261-aae2-5142-87fd-ac906e1a1655
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: #,0
+		lineageTag: 187fa67e-b852-535e-bec5-15862e2a0bb2
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		formatString: 0%
+		lineageTag: 3a132218-b51e-54ff-8f3b-985bb1e2055c
+		summarizeBy: none
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+	column Profit
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: f1b01781-2505-5d7a-a4d3-26c7f1bc27ff
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Shipping Cost'
+		dataType: double
+		formatString: $#,0.00
+		lineageTag: b8e0777c-3bf7-590d-bced-a8a83fa2d9f5
+		summarizeBy: sum
+		sourceColumn: Shipping Cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Priority'
+		dataType: string
+		lineageTag: 71ab9158-f3e5-573e-a128-e7013d5c8f6a
+		summarizeBy: none
+		sourceColumn: Order Priority
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+					Source = Excel.Workbook(File.Contents(DataFolderPath & "Global_Superstore_2018.xlsx"), null, true),
+					OrdersSheet = Source{[Item = "Orders", Kind = "Sheet"]}[Data],
+					ChangedTypes = Table.TransformColumnTypes(OrdersSheet, {{"Row ID", Int64.Type}, {"Order ID", type text}, {"Order Date", type date}, {"Ship Date", type date}, {"Ship Mode", type text}, {"Customer ID", type text}, {"Customer Name", type text}, {"Segment", type text}, {"Postal Code", Int64.Type}, {"City", type text}, {"State", type text}, {"Country", type text}, {"Region", type text}, {"Market", type text}, {"Product ID", type text}, {"Product Name", type text}, {"Sub-Category", type text}, {"Category", type text}, {"Sales", type number}, {"Quantity", Int64.Type}, {"Discount", type number}, {"Profit", type number}, {"Shipping Cost", type number}, {"Order Priority", type text}})
+				in
+					ChangedTypes
+
+	annotation PBI_ResultType = Table

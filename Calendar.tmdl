@@ -1,0 +1,73 @@
+table Calendar
+	dataCategory: Time
+	lineageTag: c4a4ced1-2bba-5bf5-8406-0f78fd59ed50
+
+	column Date
+		isKey
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 5b49ce8c-ea53-5d9f-9667-37e61cc3c891
+		summarizeBy: none
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 22e56b72-b055-5d8c-9657-ac135aa36429
+		summarizeBy: none
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 3d6b0b87-6454-538e-951d-6468a86294ee
+		summarizeBy: none
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: b47814ed-4b00-5582-9f00-f88915ac232b
+		summarizeBy: none
+		sourceColumn: [Month Number]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: a3bbf378-4113-5fe4-aba1-af0ab6ab40bc
+		summarizeBy: none
+		sortByColumn: 'Month Number'
+		sourceColumn: [Month Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Year Month'
+		dataType: string
+		lineageTag: e43ee3cf-1786-55cd-ab17-459afbf59e49
+		summarizeBy: none
+		sourceColumn: [Year Month]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				VAR _start = DATE(YEAR(MIN(Orders[Order Date])), 1, 1)
+				VAR _end = DATE(YEAR(MAX(Orders[Order Date])), 12, 31)
+				RETURN
+				ADDCOLUMNS(
+				    CALENDAR(_start, _end),
+				    "Year", YEAR([Date]),
+				    "Quarter", "Q" & ROUNDUP(MONTH([Date]) / 3, 0),
+				    "Month Number", MONTH([Date]),
+				    "Month Name", FORMAT([Date], "mmm"),
+				    "Year Month", FORMAT([Date], "yyyy-MM")
+				)
+
+	annotation PBI_ResultType = Table

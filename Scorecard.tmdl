@@ -1,0 +1,64 @@
+table Scorecard
+	lineageTag: 0a472112-e35e-5a16-bbe1-5731078fa4c0
+
+	measure 'SC Actual' =
+			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
+			    "Sales",  FORMAT([SC Sales Actual], "$#,0"),
+			    "Profit", FORMAT([SC Profit Actual], "$#,0"),
+			    "Orders", FORMAT([SC Orders Actual], "#,0"))
+		lineageTag: 68b6eafc-d1a6-5ac0-8741-25e8e956086b
+
+	measure 'SC Target' =
+			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
+			    "Sales",  FORMAT([SC Sales Target], "$#,0"),
+			    "Profit", FORMAT([SC Profit Target], "$#,0"),
+			    "Orders", FORMAT([SC Orders Target], "#,0"))
+		lineageTag: 517e1679-09eb-55ad-aa98-a40762112e02
+
+	measure 'SC Achievement %' =
+			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
+			    "Sales",  [SC Sales Ach %],
+			    "Profit", [SC Profit Ach %],
+			    "Orders", [SC Orders Ach %])
+		formatString: 0.0%
+		lineageTag: 90a6809f-892a-5f4b-82ec-b8f74049b591
+
+	measure 'SC Status' =
+			VAR _x = [SC Achievement %]
+			RETURN
+			    SWITCH(TRUE(),
+			        ISBLANK(_x), "No Target",
+			        _x >= [Threshold Achieved], "✔ Achieved",
+			        _x >= [Threshold Partial], "◐ Partially Achieved",
+			        "✖ Not Achieved")
+		lineageTag: d2011bdc-1b29-5617-a332-71e5b2775be1
+
+	measure 'SC Status Color' =
+			VAR _x = [SC Achievement %]
+			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
+		lineageTag: eb8c1675-1167-5b12-83e2-84574435bfa5
+
+	column Metric
+		dataType: string
+		lineageTag: 30bf964c-66d2-55af-bb75-0b3be13313bd
+		summarizeBy: none
+		sortByColumn: Sort
+		sourceColumn: [Metric]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sort
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1fa408e8-5b7b-5f61-bade-1c8d1ea09c3c
+		summarizeBy: none
+		sourceColumn: [Sort]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Scorecard = calculated
+		mode: import
+		source = DATATABLE("Metric", STRING, "Sort", INTEGER, {{"Sales", 1}, {"Profit", 2}, {"Orders", 3}})
+
+	annotation PBI_ResultType = Table
