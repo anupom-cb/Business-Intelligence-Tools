@@ -1,4 +1,4 @@
-expression DataFolderPath = "C:\Experiment6_PowerBI\Data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
-	lineageTag: 84d54a76-a553-52b0-a4c4-0383d884329c
+expression DataFolderPath = "C:\Experiment7_PowerBI\Data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 41ce0bca-caac-53e4-84b7-9325cac35ad2
 
 	annotation PBI_ResultType = Text

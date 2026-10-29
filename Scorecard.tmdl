@@ -1,19 +1,19 @@
 table Scorecard
-	lineageTag: 0a472112-e35e-5a16-bbe1-5731078fa4c0
+	lineageTag: 419a9217-d2b1-577a-b523-45ab5158064b
 
 	measure 'SC Actual' =
 			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
 			    "Sales",  FORMAT([SC Sales Actual], "$#,0"),
 			    "Profit", FORMAT([SC Profit Actual], "$#,0"),
 			    "Orders", FORMAT([SC Orders Actual], "#,0"))
-		lineageTag: 68b6eafc-d1a6-5ac0-8741-25e8e956086b
+		lineageTag: abbc592f-3f14-5716-ae90-3be441f33d22
 
 	measure 'SC Target' =
 			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
 			    "Sales",  FORMAT([SC Sales Target], "$#,0"),
 			    "Profit", FORMAT([SC Profit Target], "$#,0"),
 			    "Orders", FORMAT([SC Orders Target], "#,0"))
-		lineageTag: 517e1679-09eb-55ad-aa98-a40762112e02
+		lineageTag: e48228a3-e9d2-5f60-978d-e2242400d97f
 
 	measure 'SC Achievement %' =
 			SWITCH(SELECTEDVALUE(Scorecard[Metric]),
@@ -21,7 +21,7 @@ table Scorecard
 			    "Profit", [SC Profit Ach %],
 			    "Orders", [SC Orders Ach %])
 		formatString: 0.0%
-		lineageTag: 90a6809f-892a-5f4b-82ec-b8f74049b591
+		lineageTag: 0b12c44d-1924-5e37-b377-9d49a9cd7ef1
 
 	measure 'SC Status' =
 			VAR _x = [SC Achievement %]
@@ -31,16 +31,16 @@ table Scorecard
 			        _x >= [Threshold Achieved], "✔ Achieved",
 			        _x >= [Threshold Partial], "◐ Partially Achieved",
 			        "✖ Not Achieved")
-		lineageTag: d2011bdc-1b29-5617-a332-71e5b2775be1
+		lineageTag: 11dec1c8-0a98-5c9a-b3ea-8cd2fa890bac
 
 	measure 'SC Status Color' =
 			VAR _x = [SC Achievement %]
 			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
-		lineageTag: eb8c1675-1167-5b12-83e2-84574435bfa5
+		lineageTag: 68a23cd9-79b6-579b-9869-d34493f0394c
 
 	column Metric
 		dataType: string
-		lineageTag: 30bf964c-66d2-55af-bb75-0b3be13313bd
+		lineageTag: 92bda506-f492-5fae-997a-4197b6b11d13
 		summarizeBy: none
 		sortByColumn: Sort
 		sourceColumn: [Metric]
@@ -51,7 +51,7 @@ table Scorecard
 		dataType: int64
 		isHidden
 		formatString: 0
-		lineageTag: 1fa408e8-5b7b-5f61-bade-1c8d1ea09c3c
+		lineageTag: ec17e1e4-561b-5281-9f26-2cb10b3f5456
 		summarizeBy: none
 		sourceColumn: [Sort]
 

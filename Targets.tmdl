@@ -1,10 +1,10 @@
 table Targets
-	lineageTag: 49b69a78-59eb-5aec-84b9-edd585c3ced9
+	lineageTag: aea46122-b234-5205-beea-0518d4cbd645
 
 	column Year
 		dataType: int64
 		formatString: 0
-		lineageTag: 22e56b72-b055-5d8c-9657-ac135aa36429
+		lineageTag: a50ffc62-080b-5f3e-9126-972324e3c09a
 		summarizeBy: none
 		sourceColumn: Year
 
@@ -12,7 +12,7 @@ table Targets
 
 	column Region
 		dataType: string
-		lineageTag: 068160ce-82e7-5c3e-9d09-028d8f251256
+		lineageTag: 81e2b198-8fa1-5fcf-86d2-c78fd543d425
 		summarizeBy: none
 		sourceColumn: Region
 
@@ -21,7 +21,7 @@ table Targets
 	column 'Sales Target'
 		dataType: double
 		formatString: $#,0
-		lineageTag: 53b09705-0b5d-5f3a-aad1-fe6ffb4d72f9
+		lineageTag: 69f2562c-f463-51dc-a263-73288b37670c
 		summarizeBy: sum
 		sourceColumn: Sales Target
 
@@ -30,7 +30,7 @@ table Targets
 	column 'Profit Target'
 		dataType: double
 		formatString: $#,0
-		lineageTag: da7dc4cd-f5d4-5536-aa66-774e33877ebe
+		lineageTag: 68be9adb-ebc6-5ba2-b677-f98cbf2de61c
 		summarizeBy: sum
 		sourceColumn: Profit Target
 
@@ -39,7 +39,7 @@ table Targets
 	column 'Orders Target'
 		dataType: int64
 		formatString: #,0
-		lineageTag: a096dfab-d3de-5fe2-a89e-ac65559b78cd
+		lineageTag: 935d7ea6-1a0c-5312-807a-e687c5fd7cac
 		summarizeBy: sum
 		sourceColumn: Orders Target
 
