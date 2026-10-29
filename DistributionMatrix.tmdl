@@ -1,0 +1,66 @@
+table DistributionMatrix
+	lineageTag: 4c4ee619-974e-51ce-8e87-7607aa5d53d6
+
+	column 'User Group'
+		dataType: string
+		lineageTag: ce3b02eb-78f5-5b9c-9d92-28e075f05db9
+		summarizeBy: none
+		sourceColumn: [User Group]
+
+	column 'Report'
+		dataType: string
+		lineageTag: 53d398fd-3aae-508a-ad2d-751894dc83ac
+		summarizeBy: none
+		sourceColumn: [Report]
+
+	column 'Frequency'
+		dataType: string
+		lineageTag: 72bae232-5b8a-55e2-b1e9-cfcc842529f1
+		summarizeBy: none
+		sourceColumn: [Frequency]
+
+	column 'Delivery Method'
+		dataType: string
+		lineageTag: 6241e681-077d-53d3-8e40-673e04df652c
+		summarizeBy: none
+		sourceColumn: [Delivery Method]
+
+	column 'Format'
+		dataType: string
+		lineageTag: 71bee5fc-46cd-59e8-9fbb-9d96d854af5d
+		summarizeBy: none
+		sourceColumn: [Format]
+
+	column 'Access'
+		dataType: string
+		lineageTag: c5c00672-6f21-5957-84ff-c3352289cfc2
+		summarizeBy: none
+		sourceColumn: [Access]
+
+	measure 'Distribution Entries' = COUNTROWS(DistributionMatrix)
+		formatString: 0
+		displayFolder: Measures
+		lineageTag: 1595c82d-7b31-513f-810c-113b7b0cf23e
+
+	partition DistributionMatrix = calculated
+		mode: import
+		source =
+				DATATABLE(
+				"User Group", STRING,
+				"Report", STRING,
+				"Frequency", STRING,
+				"Delivery Method", STRING,
+				"Format", STRING,
+				"Access", STRING,
+				{
+				{"Executive Management","Monthly Executive Dashboard","Monthly","Email + Power BI Service App","PDF / PowerPoint","View"},
+				{"Sales Managers","Daily Sales Report","Daily","Email subscription","PDF","View"},
+				{"Regional Heads","Daily Sales Report","Daily","Email subscription","PDF","View"},
+				{"Regional Heads","KPI Alert Digest","Daily","Power BI Service alert","Notification / Email","View"},
+				{"Finance Team","Weekly Profit Report","Weekly","Shared Workspace + Email","PDF / Excel","Contribute"},
+				{"Logistics Team","Weekly Returns Monitor","Weekly","Shared Workspace","Power BI Service","View"},
+				{"Customer Service","Weekly Returns Monitor","Weekly","Email link","Power BI Service","View"},
+				{"BI Operations Team","Dataset Refresh Status","Daily","Power BI Service","Refresh history / Email","Admin"}
+				})
+
+	annotation PBI_ResultType = Table

@@ -1,11 +1,2 @@
-{
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
-  "metadata": {
-    "type": "Report",
-    "displayName": "Experiment7"
-  },
-  "config": {
-    "version": "2.0",
-    "logicalId": "14c780ac-bbfc-5402-a5d9-a02938c6e611"
-  }
-}
+**/.pbi/localSettings.json
+**/.pbi/cache.abf

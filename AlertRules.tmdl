@@ -1,0 +1,69 @@
+table AlertRules
+	lineageTag: 561055db-9fd2-5108-b544-dce5f15fb249
+
+	column 'ID'
+		dataType: string
+		lineageTag: 3f595204-8d15-50f4-a487-e5517d6bed2f
+		summarizeBy: none
+		sourceColumn: [ID]
+
+	column 'KPI'
+		dataType: string
+		lineageTag: 9e1fe836-fde9-59ae-a124-ddde84afacc9
+		summarizeBy: none
+		sourceColumn: [KPI]
+
+	column 'Alert Condition'
+		dataType: string
+		lineageTag: 04fd9855-fbc2-53ff-b470-47e17f4e4cca
+		summarizeBy: none
+		sourceColumn: [Alert Condition]
+
+	column 'Severity'
+		dataType: string
+		lineageTag: 78907dd4-27e6-5872-aab0-a3d0a6164e79
+		summarizeBy: none
+		sourceColumn: [Severity]
+
+	column 'Recipients'
+		dataType: string
+		lineageTag: 88dff880-f39e-58fc-a6a4-605c9efdae4b
+		summarizeBy: none
+		sourceColumn: [Recipients]
+
+	column 'Action Taken'
+		dataType: string
+		lineageTag: 9c9d0055-9e23-5b22-9a23-4aafaa9cbb9b
+		summarizeBy: none
+		sourceColumn: [Action Taken]
+
+	column 'Channel'
+		dataType: string
+		lineageTag: 708ad4b7-5d2d-50af-9174-1b354b2062e1
+		summarizeBy: none
+		sourceColumn: [Channel]
+
+	measure 'Alert Rules' = COUNTROWS(AlertRules)
+		formatString: 0
+		displayFolder: Measures
+		lineageTag: 408ef673-5095-53bf-9fff-564f2e37250b
+
+	partition AlertRules = calculated
+		mode: import
+		source =
+				DATATABLE(
+				"ID", STRING,
+				"KPI", STRING,
+				"Alert Condition", STRING,
+				"Severity", STRING,
+				"Recipients", STRING,
+				"Action Taken", STRING,
+				"Channel", STRING,
+				{
+				{"A1","Profit Margin %","Profit Margin below 10%","High","Regional Head, Finance Manager","Review discounts and shipping cost; freeze low-margin promotions","Power BI alert + Email"},
+				{"A2","Sales Growth","Sales decline greater than 15% vs previous year","High","Sales Manager, Regional Head","Investigate demand drop; launch targeted campaign","Power BI alert + Teams"},
+				{"A3","Returns","Returns increase greater than 20% vs previous year","Medium","Operations Manager, Customer Service","Audit product quality and delivery; contact top returning customers","Email + Shared Workspace"},
+				{"A4","Data Refresh","Scheduled refresh fails","Critical","BI Operations Team","Check gateway and credentials; rerun refresh","Email"}
+				})
+
+	annotation PBI_ResultType = Table

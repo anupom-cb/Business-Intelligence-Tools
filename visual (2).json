@@ -1,219 +1,199 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
-  "name": "a606f526f88257379418",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "c8e4b838085f5f83b",
   "position": {
-    "x": 20,
-    "y": 66,
-    "z": 0,
-    "height": 644,
-    "width": 560,
-    "tabOrder": 0
+    "x": 520,
+    "y": 86,
+    "z": 30,
+    "height": 78,
+    "width": 240,
+    "tabOrder": 30
   },
   "visual": {
-    "visualType": "textbox",
+    "visualType": "card",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Orders"
+                    }
+                  },
+                  "Property": "Margin CY"
+                }
+              },
+              "queryRef": "Orders.Margin CY",
+              "nativeQueryRef": "Margin CY"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true,
     "objects": {
-      "general": [
+      "labels": [
         {
           "properties": {
-            "paragraphs": [
-              {
-                "textRuns": [
-                  {
-                    "value": "Findings — all years (2014–2017)",
-                    "textStyle": {
-                      "fontSize": "14pt",
-                      "color": "#1F4E79",
-                      "fontWeight": "bold"
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
                     }
                   }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Overall: $12.64M sales · $1.47M profit · 25,728 orders · 11.6% margin.",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "",
-                    "textStyle": {
-                      "fontSize": "6pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Best performing region (by profit): Western Europe",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#2E7D32",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "$1.73M sales and $218K profit (12.6% margin) — the largest profit pool. Eastern Asia and Southern Asia earn the best margins (about 19–20%).",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "",
-                    "textStyle": {
-                      "fontSize": "6pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Worst performing region (by profit): Western Asia",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#C62828",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "$317K sales but a $53.9K loss (−17.0% margin). Western Africa (−$50.4K) and Central Asia (−$7.3K) also lose money.",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "",
-                    "textStyle": {
-                      "fontSize": "6pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Most profitable category: Technology",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#2E7D32",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "$663.8K profit on $4.74M sales (14.0% margin).",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "",
-                    "textStyle": {
-                      "fontSize": "6pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Least profitable category: Furniture",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#C62828",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "$285.1K profit on $4.11M sales — only a 6.9% margin; the Tables sub-category alone loses $64.1K.",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "",
-                    "textStyle": {
-                      "fontSize": "6pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Recommendation",
-                    "textStyle": {
-                      "fontSize": "14pt",
-                      "color": "#1F4E79",
-                      "fontWeight": "bold"
-                    }
-                  }
-                ]
-              },
-              {
-                "textRuns": [
-                  {
-                    "value": "Cap discounts at 30% and require manager approval above it. Orders discounted more than 30% brought in $1.55M of sales but a $793.5K loss, while all other orders earned $2.26M profit. The three loss-making regions average 35–43% discount (vs 5–9% in the best regions), and Tables average 29%. Tightening discount policy there and re-pricing Furniture / Tables should lift total profit without needing more sales.",
-                    "textStyle": {
-                      "fontSize": "11pt",
-                      "color": "#1B2A3A"
-                    }
-                  }
-                ]
+                }
               }
-            ]
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "26D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
           }
         }
       ]
     },
-    "drillFilterOtherVisuals": true
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B5CF6'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#8B5CF6'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "14D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BottomRight'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
   }
 }

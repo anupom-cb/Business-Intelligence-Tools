@@ -1,427 +1,342 @@
 table Orders
-	lineageTag: c2b31e50-c782-54c6-8087-930ef09274d1
-
-	measure 'Total Sales' = SUM(Orders[Sales])
-		formatString: $#,0
-		displayFolder: 1 Base KPIs
-		lineageTag: f1a0b212-4054-5264-a905-2963b10638da
-
-	measure 'Total Profit' = SUM(Orders[Profit])
-		formatString: $#,0
-		displayFolder: 1 Base KPIs
-		lineageTag: cc273c21-b3f9-5620-9f1f-83111013a733
-
-	measure 'Total Orders' = DISTINCTCOUNT(Orders[Order ID])
-		formatString: #,0
-		displayFolder: 1 Base KPIs
-		lineageTag: 01a14f67-4c1b-5b81-af71-95c2b074ef7c
-
-	measure 'Profit Margin %' = DIVIDE([Total Profit], [Total Sales])
-		formatString: 0.0%
-		displayFolder: 1 Base KPIs
-		lineageTag: ea100fa5-a5f3-5888-8b69-986583af30e2
-
-	measure 'Total Customers' = DISTINCTCOUNT(Orders[Customer Name])
-		formatString: #,0
-		displayFolder: 1 Base KPIs
-		lineageTag: 2972b79f-a5b9-5c1e-a3a4-4ce286968b6c
-
-	measure 'Sales Top 10 Customers' =
-			VAR _rank = RANKX(ALLSELECTED(Orders[Customer Name]), [Total Sales], , DESC, Dense)
-			RETURN IF(_rank <= 10, [Total Sales])
-		formatString: $#,0
-		displayFolder: 2 Chart helpers
-		lineageTag: 8756eedf-03f1-57e5-ab78-3d19f82b564d
-
-	measure 'SC Sales Actual' = CALCULATE([Total Sales], REMOVEFILTERS(Orders[Category]))
-		formatString: $#,0
-		displayFolder: 3 Scorecard
-		lineageTag: 17393121-fc19-5773-ae4b-19e2dbd63dc9
-
-	measure 'SC Profit Actual' = CALCULATE([Total Profit], REMOVEFILTERS(Orders[Category]))
-		formatString: $#,0
-		displayFolder: 3 Scorecard
-		lineageTag: e4f61178-e9d1-5175-b00b-1f5843dd0d05
-
-	measure 'SC Orders Actual' = CALCULATE([Total Orders], REMOVEFILTERS(Orders[Category]))
-		formatString: #,0
-		displayFolder: 3 Scorecard
-		lineageTag: 678e6fca-8358-5ddc-a65a-07812bdd7d7b
-
-	measure 'SC Sales Target' =
-			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
-			VAR _years = VALUES(Calendar[Year])
-			RETURN
-			    CALCULATE(
-			        SUM(Targets[Sales Target]),
-			        TREATAS(_regions, Targets[Region]),
-			        TREATAS(_years, Targets[Year])
-			    )
-		formatString: $#,0
-		displayFolder: 3 Scorecard
-		lineageTag: 052eabc0-7b5e-5b35-a937-9291ac454c9e
-
-	measure 'SC Profit Target' =
-			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
-			VAR _years = VALUES(Calendar[Year])
-			RETURN
-			    CALCULATE(
-			        SUM(Targets[Profit Target]),
-			        TREATAS(_regions, Targets[Region]),
-			        TREATAS(_years, Targets[Year])
-			    )
-		formatString: $#,0
-		displayFolder: 3 Scorecard
-		lineageTag: 972dd7e2-a570-5f10-b46d-8434cf8ea327
-
-	measure 'SC Orders Target' =
-			VAR _regions = CALCULATE(VALUES(Orders[Region]), REMOVEFILTERS(Orders[Category]))
-			VAR _years = VALUES(Calendar[Year])
-			RETURN
-			    CALCULATE(
-			        SUM(Targets[Orders Target]),
-			        TREATAS(_regions, Targets[Region]),
-			        TREATAS(_years, Targets[Year])
-			    )
-		formatString: #,0
-		displayFolder: 3 Scorecard
-		lineageTag: 4fdedf27-e23b-58dd-a2d1-ded147ed360c
-
-	measure 'SC Sales Ach %' =
-			VAR _a = [SC Sales Actual]
-			VAR _t = [SC Sales Target]
-			RETURN
-			    IF(ISBLANK(_t), BLANK(),
-			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
-		formatString: 0.0%
-		displayFolder: 3 Scorecard
-		lineageTag: cdaddcf4-5943-52b7-adc8-7fa216edf6b5
-
-	measure 'SC Profit Ach %' =
-			VAR _a = [SC Profit Actual]
-			VAR _t = [SC Profit Target]
-			RETURN
-			    IF(ISBLANK(_t), BLANK(),
-			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
-		formatString: 0.0%
-		displayFolder: 3 Scorecard
-		lineageTag: 2414dc46-c4be-54d8-9bea-6e47a202a19b
-
-	measure 'SC Orders Ach %' =
-			VAR _a = [SC Orders Actual]
-			VAR _t = [SC Orders Target]
-			RETURN
-			    IF(ISBLANK(_t), BLANK(),
-			        IF(_t > 0, DIVIDE(_a, _t), IF(_a >= _t, 1, 0)))
-		formatString: 0.0%
-		displayFolder: 3 Scorecard
-		lineageTag: c0c2a3eb-8ba9-5bd2-b2e8-00188a57d440
-
-	measure 'SC Sales Color' =
-			VAR _x = [SC Sales Ach %]
-			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
-		displayFolder: 3 Scorecard
-		lineageTag: 873fd3f5-5905-5741-8f4c-49ab68dc5cdf
-
-	measure 'SC Profit Color' =
-			VAR _x = [SC Profit Ach %]
-			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
-		displayFolder: 3 Scorecard
-		lineageTag: 5fcc72ac-8197-5b8a-a536-51e3162e4867
-
-	measure 'SC Orders Color' =
-			VAR _x = [SC Orders Ach %]
-			RETURN SWITCH(TRUE(), ISBLANK(_x), "#BDBDBD", _x >= [Threshold Achieved], "#2E7D32", _x >= [Threshold Partial], "#F9A825", "#C62828")
-		displayFolder: 3 Scorecard
-		lineageTag: 1855876d-fa53-53f0-b1b1-d88715ab06ed
-
-	measure 'Avg Discount %' = AVERAGE(Orders[Discount])
-		formatString: 0.0%
-		displayFolder: 1 Base KPIs
-		lineageTag: 935d6dff-2391-58e3-bec6-52db2f7e0b2b
-
-	measure 'Sales PY' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Calendar[Date]))
-		formatString: $#,0
-		displayFolder: 4 Advanced analytics
-		lineageTag: 7774e046-a599-5528-a5ec-eaf9913f5c2d
-
-	measure 'Profit PY' = CALCULATE([Total Profit], SAMEPERIODLASTYEAR(Calendar[Date]))
-		formatString: $#,0
-		displayFolder: 4 Advanced analytics
-		lineageTag: 8708e2bf-727c-5103-9888-35528754e8d5
-
-	measure 'Sales YoY %' =
-			VAR _py = [Sales PY]
-			RETURN IF(NOT ISBLANK(_py), DIVIDE([Total Sales] - _py, _py))
-		formatString: 0.0%
-		displayFolder: 4 Advanced analytics
-		lineageTag: 8c32d8f7-c643-569f-a660-32fe6d178bd7
-
-	measure 'Profit YoY %' =
-			VAR _py = [Profit PY]
-			RETURN IF(NOT ISBLANK(_py), DIVIDE([Total Profit] - _py, _py))
-		formatString: 0.0%
-		displayFolder: 4 Advanced analytics
-		lineageTag: 3fa26865-a068-5440-bfd1-78b3e8d8641f
-
-	measure 'Sales Share %' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALLSELECTED(Orders)))
-		formatString: 0.0%
-		displayFolder: 4 Advanced analytics
-		lineageTag: 54b0f18c-9a81-51da-ac9c-a7763f4e4b9d
-
-	measure 'Loss from Loss-making Lines' = CALCULATE([Total Profit], Orders[Profit] < 0)
-		formatString: $#,0
-		displayFolder: 4 Advanced analytics
-		lineageTag: f6df6b0d-3ad2-5e5f-bf4f-90757f7d27ab
-
-	measure 'Threshold Achieved' = 1
-		formatString: 0%
-		displayFolder: 3 Scorecard
-		lineageTag: 04eb887b-9912-5b5b-b5ef-aaec53e2efe3
-
-	measure 'Threshold Partial' = 0.8
-		formatString: 0%
-		displayFolder: 3 Scorecard
-		lineageTag: 352add52-2d1d-5fb5-a8a4-7655bce45349
+	lineageTag: c7daf05e-28fe-53ad-bb11-fa285ecde43f
 
 	column 'Row ID'
 		dataType: int64
 		formatString: 0
-		lineageTag: be1b4e9b-a8b0-5c4b-89ea-e52fd113bc4f
+		lineageTag: bbe9bcf4-860d-547d-a67b-0abe5e0ba4da
 		summarizeBy: none
 		sourceColumn: Row ID
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Order ID'
 		dataType: string
-		lineageTag: 142c0a6f-9ecd-5688-ac57-164eb49eca09
+		lineageTag: 4da8a8d5-78ff-54f4-8c43-3f6c1d05c04b
 		summarizeBy: none
 		sourceColumn: Order ID
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Order Date'
 		dataType: dateTime
-		formatString: Long Date
-		lineageTag: e4736e7a-236a-5258-bd4b-55193b088fbb
+		formatString: dd-mmm-yyyy
+		lineageTag: 066f44ce-3ade-5383-b9e2-408dfa75de10
 		summarizeBy: none
 		sourceColumn: Order Date
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Ship Date'
 		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 7245d4fd-a580-5ac2-8017-2fbf30222431
+		formatString: dd-mmm-yyyy
+		lineageTag: d0330623-982c-5ff1-a0a6-e8950d8dce83
 		summarizeBy: none
 		sourceColumn: Ship Date
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Ship Mode'
 		dataType: string
-		lineageTag: 75ce0944-3207-5e4f-8a93-dfeef5a70173
+		lineageTag: 906dd770-ecca-5d98-a266-29da868a9d36
 		summarizeBy: none
 		sourceColumn: Ship Mode
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Customer ID'
 		dataType: string
-		lineageTag: 6c4715c7-6eac-5842-8a0f-82c204803468
+		lineageTag: 7cd3735e-cbb5-5a42-9a20-ea4310d51ebf
 		summarizeBy: none
 		sourceColumn: Customer ID
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Customer Name'
 		dataType: string
-		lineageTag: 72bcb53b-a9ed-52da-8648-de6122aecb56
+		lineageTag: 90c5b268-5049-54eb-9813-fcb0fe7dce1e
 		summarizeBy: none
 		sourceColumn: Customer Name
 
-		annotation SummarizationSetBy = Automatic
-
-	column Segment
+	column 'Segment'
 		dataType: string
-		lineageTag: 2c44d641-fdfe-59fc-8ae1-9788e4ddc771
+		lineageTag: cf0e5f71-2bec-5523-9c12-4c012e869291
 		summarizeBy: none
 		sourceColumn: Segment
 
-		annotation SummarizationSetBy = Automatic
-
-	column 'Postal Code'
-		dataType: int64
-		formatString: 0
-		lineageTag: d2c44151-0ffc-5d51-8b99-301bd8705ae3
-		summarizeBy: none
-		sourceColumn: Postal Code
-
-		annotation SummarizationSetBy = Automatic
-
-	column City
+	column 'City'
 		dataType: string
-		lineageTag: 65ed43bc-5244-5be8-ad45-8c288a62b2d2
+		lineageTag: a0f1500a-0c30-5b3a-918f-fb701232d8df
 		summarizeBy: none
 		sourceColumn: City
 
-		annotation SummarizationSetBy = Automatic
-
-	column State
+	column 'State'
 		dataType: string
-		lineageTag: 8f0900ab-6137-512a-984e-610d44709e22
+		lineageTag: d7df32b6-6b33-56f7-832e-3612ffa28738
 		summarizeBy: none
 		sourceColumn: State
 
-		annotation SummarizationSetBy = Automatic
-
-	column Country
+	column 'Country'
 		dataType: string
-		lineageTag: 7c8fa6a7-a157-5717-8d25-b60fae0fb349
+		lineageTag: ff5f69fc-b60a-5e01-af5e-08f2a94eb3cf
 		summarizeBy: none
 		sourceColumn: Country
 
-		annotation SummarizationSetBy = Automatic
-
-	column Region
+	column 'Region'
 		dataType: string
-		lineageTag: 81e2b198-8fa1-5fcf-86d2-c78fd543d425
+		lineageTag: 30133a3d-ae44-5b23-b1dd-42450eb37e5d
 		summarizeBy: none
 		sourceColumn: Region
 
-		annotation SummarizationSetBy = Automatic
-
-	column Market
+	column 'Market'
 		dataType: string
-		lineageTag: 0638bbeb-e4cf-5640-b413-f6ccf1d377ed
+		lineageTag: 4d8fd067-8153-598b-a3ee-17e06c5b2359
 		summarizeBy: none
 		sourceColumn: Market
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Product ID'
 		dataType: string
-		lineageTag: dbb7fc5f-936d-5819-9c93-4d75e3289f51
+		lineageTag: 4b65536b-d97e-5a4c-b4cf-79ec944c92e8
 		summarizeBy: none
 		sourceColumn: Product ID
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Product Name'
 		dataType: string
-		lineageTag: 659ccfe0-bbe8-594e-a001-fd28f04d0c99
+		lineageTag: 19aa4240-6ce3-5567-b293-3da93b0aee33
 		summarizeBy: none
 		sourceColumn: Product Name
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Sub-Category'
 		dataType: string
-		lineageTag: 7fa96228-0e29-56c0-95a4-6adb731907de
+		lineageTag: 27e3c2ef-9d7e-55b7-8706-8bbfb838e14e
 		summarizeBy: none
 		sourceColumn: Sub-Category
 
-		annotation SummarizationSetBy = Automatic
-
-	column Category
+	column 'Category'
 		dataType: string
-		lineageTag: 4b34ed38-3887-572e-9559-3f9beb5a7fed
+		lineageTag: 2e1be350-2d3d-5187-a466-ceb5213136ad
 		summarizeBy: none
 		sourceColumn: Category
 
-		annotation SummarizationSetBy = Automatic
-
-	column Sales
+	column 'Sales'
 		dataType: double
-		formatString: $#,0.00
-		lineageTag: 50e48e52-1bee-5f9b-bdc0-a0b087cc12a3
+		formatString: \$#,0.00
+		lineageTag: 47c031b8-3e7a-569c-a1da-5b907b1bc9f7
 		summarizeBy: sum
 		sourceColumn: Sales
 
-		annotation SummarizationSetBy = Automatic
-
-	column Quantity
+	column 'Quantity'
 		dataType: int64
 		formatString: #,0
-		lineageTag: 4b623abf-ce00-5971-967d-294d3175a3b9
+		lineageTag: 031f0b24-feb3-5c3f-bb4e-d02c1c1e2072
 		summarizeBy: sum
 		sourceColumn: Quantity
 
-		annotation SummarizationSetBy = Automatic
-
-	column Discount
+	column 'Discount'
 		dataType: double
 		formatString: 0%
-		lineageTag: 8d1518d8-dbc2-592e-954d-685cd47f7303
+		lineageTag: 61d85196-a02d-5a73-9b84-b097c90358a8
 		summarizeBy: none
 		sourceColumn: Discount
 
-		annotation SummarizationSetBy = Automatic
-
-	column Profit
+	column 'Profit'
 		dataType: double
-		formatString: $#,0.00
-		lineageTag: bd546eba-608d-5d8b-b027-f13d9c3f2993
+		formatString: \$#,0.00
+		lineageTag: 152a6ad2-66d8-5ccd-bd87-aa6f476e0cc6
 		summarizeBy: sum
 		sourceColumn: Profit
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Shipping Cost'
 		dataType: double
-		formatString: $#,0.00
-		lineageTag: 55927aa2-90e3-5af9-bb0f-b2f4bb9524e0
+		formatString: \$#,0.00
+		lineageTag: 16240bbb-7b4a-5801-b517-35be1349a68e
 		summarizeBy: sum
 		sourceColumn: Shipping Cost
 
-		annotation SummarizationSetBy = Automatic
-
 	column 'Order Priority'
 		dataType: string
-		lineageTag: a5c94d20-a830-58d3-9bed-d03c5a752c32
+		lineageTag: f02e78f2-503f-5541-83a2-0578a4a2bd38
 		summarizeBy: none
 		sourceColumn: Order Priority
 
-		annotation SummarizationSetBy = Automatic
+	measure 'Total Sales' = SUM(Orders[Sales])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: deb4b805-c5a2-5a1a-9f76-91d26d71f4d6
 
-	column 'Discount Band' =
-			SWITCH(TRUE(),
-			    Orders[Discount] = 0, "No discount",
-			    Orders[Discount] <= 0.2, "0-20%",
-			    Orders[Discount] <= 0.3, "20-30%",
-			    Orders[Discount] <= 0.5, "30-50%",
-			    ">50%")
-		dataType: string
-		lineageTag: c0b2b401-2231-5b73-9468-e53bb3c9ea0c
-		summarizeBy: none
-		sortByColumn: 'Discount Band Order'
+	measure 'Total Profit' = SUM(Orders[Profit])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: 2a0f587d-c613-5734-b37c-830714f7caec
 
-		annotation SummarizationSetBy = Automatic
+	measure 'Total Quantity' = SUM(Orders[Quantity])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: b903063d-d3a3-5781-801f-cc26ae3a0fed
 
-	column 'Discount Band Order' =
-			SWITCH(TRUE(),
-			    Orders[Discount] = 0, 1,
-			    Orders[Discount] <= 0.2, 2,
-			    Orders[Discount] <= 0.3, 3,
-			    Orders[Discount] <= 0.5, 4,
-			    5)
-		dataType: int64
-		isHidden
+	measure 'Total Orders' = DISTINCTCOUNT(Orders[Order ID])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: da5934ef-b963-55cf-9db2-913b17245ffe
+
+	measure 'Total Customers' = DISTINCTCOUNT(Orders[Customer ID])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: 45ef1a16-328b-51a9-b2bd-f4bb087a5176
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit],[Total Sales])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: 063e1d2a-c6bf-5951-a13d-37dd349b38dd
+
+	measure 'Avg Discount %' = AVERAGE(Orders[Discount])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: d86d5cf6-9795-51da-8acb-ab91f2be987d
+
+	measure 'Avg Order Value' = DIVIDE([Total Sales],[Total Orders])
+		formatString: \$#,0.00
+		displayFolder: Measures
+		lineageTag: a6365d70-3d61-5f88-b27d-c211cab6da2b
+
+	measure 'Total Shipping Cost' = SUM(Orders[Shipping Cost])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: a27330d5-66ae-5ce0-8731-8beac53587f6
+
+	measure 'Sales PY' = CALCULATE([Total Sales],SAMEPERIODLASTYEAR('Calendar'[Date]))
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: cc364c5d-056c-55c4-9ea9-3898a35ce548
+
+	measure 'Sales YoY %' = DIVIDE([Total Sales]-[Sales PY],[Sales PY])
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: c9600ee5-a695-5852-8fb5-77286029c7a9
+
+	measure 'Returned Orders' = CALCULATE(DISTINCTCOUNT(Orders[Order ID]),TREATAS(VALUES(Returns[Order ID]),Orders[Order ID]))
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: 62b7c3af-e2c7-527e-b587-a8eaae4215ba
+
+	measure 'Return Rate %' = DIVIDE([Returned Orders],[Total Orders])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: 4e05f790-6a50-53d7-856a-ceab3b7061d9
+
+	measure 'Top 10 Customer Sales' = VAR r = RANKX(ALLSELECTED(Orders[Customer Name]),[Total Sales],,DESC,Dense) RETURN IF(r<=10,[Total Sales])
+		formatString: \$#,0
+		displayFolder: Ranking
+		lineageTag: d166e688-2c34-56ba-bb34-02be252ff1d6
+
+	measure 'Alert Year' = MAX('Calendar'[Year])
 		formatString: 0
-		lineageTag: fc47e316-eb43-5efe-99cb-861795afb565
-		summarizeBy: none
+		displayFolder: Alerts
+		lineageTag: dd13f84f-532c-50c0-9721-db6dc5e1a82d
 
-		annotation SummarizationSetBy = Automatic
+	measure 'Sales CY' = VAR ay=MAX('Calendar'[Year]) RETURN CALCULATE([Total Sales],'Calendar'[Year]=ay)
+		formatString: \$#,0
+		displayFolder: Alerts
+		lineageTag: 9bb07646-29c5-5935-8a07-3bfe42e91f77
+
+	measure 'Sales Prior Year' = VAR ay=MAX('Calendar'[Year]) RETURN CALCULATE([Total Sales],'Calendar'[Year]=ay-1)
+		formatString: \$#,0
+		displayFolder: Alerts
+		lineageTag: 0f8d0e4a-117a-5b2c-9d33-b32b429a2166
+
+	measure 'Profit CY' = VAR ay=MAX('Calendar'[Year]) RETURN CALCULATE([Total Profit],'Calendar'[Year]=ay)
+		formatString: \$#,0
+		displayFolder: Alerts
+		lineageTag: b2a7bef6-3cb6-5d09-9ada-5f2930854864
+
+	measure 'Returns CY' = VAR ay=MAX('Calendar'[Year]) RETURN CALCULATE([Returned Orders],'Calendar'[Year]=ay)
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 488e4d19-88c7-5800-96fa-2984f3577974
+
+	measure 'Returns Prior Year' = VAR ay=MAX('Calendar'[Year]) RETURN CALCULATE([Returned Orders],'Calendar'[Year]=ay-1)
+		formatString: #,0
+		displayFolder: Alerts
+		lineageTag: 8eade3ec-df58-5ad8-aa16-a44ae5df8ff2
+
+	measure 'Margin CY' = DIVIDE([Profit CY],[Sales CY])
+		formatString: 0.0%
+		displayFolder: Alerts
+		lineageTag: 292499ab-834a-5915-bd79-0ad85ed714c0
+
+	measure 'Sales YoY Change %' = DIVIDE([Sales CY]-[Sales Prior Year],[Sales Prior Year])
+		formatString: 0.0%
+		displayFolder: Alerts
+		lineageTag: 2251adb0-0a5e-5021-9b71-ce14890d031f
+
+	measure 'Returns Change %' = DIVIDE([Returns CY]-[Returns Prior Year],[Returns Prior Year])
+		formatString: 0.0%
+		displayFolder: Alerts
+		lineageTag: 6dd2355d-a5f8-5a49-902f-ff7d8d47c2d0
+
+	measure 'Margin Threshold' = 0.10
+		formatString: 0%
+		displayFolder: Alerts
+		lineageTag: 6794dea9-9032-5e80-add1-e13e18e6534a
+
+	measure 'Sales Decline Threshold' = -0.15
+		formatString: 0%
+		displayFolder: Alerts
+		lineageTag: d239a7b6-fb64-5b1f-a6be-82cd7faa92aa
+
+	measure 'Returns Increase Threshold' = 0.20
+		formatString: 0%
+		displayFolder: Alerts
+		lineageTag: f89ac9a8-f93f-59e7-9c9e-6d9b59cfb3e7
+
+	measure 'Margin Alert' = IF(ISBLANK([Sales CY]),BLANK(),IF([Margin CY]<[Margin Threshold],"🔴 ALERT","🟢 OK"))
+		formatString: @
+		displayFolder: Alerts
+		lineageTag: 81297609-44b4-51de-8537-a44ba2f16a51
+
+	measure 'Sales Alert' = IF(ISBLANK([Sales YoY Change %]),"⚪ n/a",IF([Sales YoY Change %]<[Sales Decline Threshold],"🔴 ALERT","🟢 OK"))
+		formatString: @
+		displayFolder: Alerts
+		lineageTag: f46df251-4d6f-5519-ba1e-c36b8da565b3
+
+	measure 'Returns Alert' = IF(ISBLANK([Returns Change %]),"⚪ n/a",IF([Returns Change %]>[Returns Increase Threshold],"🔴 ALERT","🟢 OK"))
+		formatString: @
+		displayFolder: Alerts
+		lineageTag: 473edc2c-e6b2-50c6-836a-779aae1dbe3f
+
+	measure 'Active Alerts' = VAR m=IF([Margin CY]<[Margin Threshold],1,0) VAR s=IF([Sales YoY Change %]<[Sales Decline Threshold],1,0) VAR r=IF([Returns Change %]>[Returns Increase Threshold],1,0) RETURN m+s+r
+		formatString: 0
+		displayFolder: Alerts
+		lineageTag: 59b80fb7-0f17-5131-823b-ed9f13d97104
+
+	measure 'Regions Below Margin Target' = COUNTROWS(FILTER(VALUES(Orders[Region]),[Margin CY]<[Margin Threshold]))
+		formatString: 0
+		displayFolder: Alerts
+		lineageTag: 0b452ddc-5497-5046-83c5-eb52810bd723
+
+	hierarchy Geography
+		lineageTag: 0e6dd03b-5295-5c28-951a-7d779745c05d
+		level Region
+			lineageTag: 30d42f19-7e4b-5d98-b8db-d600ca6ca472
+			column: Region
+		level State
+			lineageTag: 146dfb18-e019-5452-a5bd-d849a9a9a594
+			column: State
+		level City
+			lineageTag: ee5deda4-7787-5ef3-9204-cbc925cbde77
+			column: City
+
+	hierarchy 'Product Hierarchy'
+		lineageTag: 113b7782-99d4-5bcc-8429-dea377e8b85a
+		level Category
+			lineageTag: e00dcbd6-facc-5d2d-9da1-eee11a20fe71
+			column: Category
+		level 'Sub-Category'
+			lineageTag: 0bd1a01d-44b5-5859-9c79-d5e33a584f0a
+			column: 'Sub-Category'
+		level 'Product Name'
+			lineageTag: ec3c02d1-7fc3-5f3e-9829-69022ee62e02
+			column: 'Product Name'
 
 	partition Orders = m
 		mode: import
 		source =
 				let
-					Source = Excel.Workbook(File.Contents(DataFolderPath & "Global_Superstore_2018.xlsx"), null, true),
-					OrdersSheet = Source{[Item = "Orders", Kind = "Sheet"]}[Data],
-					ChangedTypes = Table.TransformColumnTypes(OrdersSheet, {{"Row ID", Int64.Type}, {"Order ID", type text}, {"Order Date", type date}, {"Ship Date", type date}, {"Ship Mode", type text}, {"Customer ID", type text}, {"Customer Name", type text}, {"Segment", type text}, {"Postal Code", Int64.Type}, {"City", type text}, {"State", type text}, {"Country", type text}, {"Region", type text}, {"Market", type text}, {"Product ID", type text}, {"Product Name", type text}, {"Sub-Category", type text}, {"Category", type text}, {"Sales", type number}, {"Quantity", Int64.Type}, {"Discount", type number}, {"Profit", type number}, {"Shipping Cost", type number}, {"Order Priority", type text}})
+				    Source = Excel.Workbook(File.Contents(FilePath), null, true),
+				    OrdersSheet = Source{[Item="Orders",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(OrdersSheet, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Row ID", Int64.Type},{"Order ID", type text},{"Order Date", type datetime},{"Ship Date", type datetime},{"Ship Mode", type text},{"Customer ID", type text},{"Customer Name", type text},{"Segment", type text},{"City", type text},{"State", type text},{"Country", type text},{"Region", type text},{"Market", type text},{"Product ID", type text},{"Product Name", type text},{"Sub-Category", type text},{"Category", type text},{"Sales", type number},{"Quantity", Int64.Type},{"Discount", type number},{"Profit", type number},{"Shipping Cost", type number},{"Order Priority", type text}}),
+				    Cleaned = Table.SelectColumns(Typed, {"Row ID","Order ID","Order Date","Ship Date","Ship Mode","Customer ID","Customer Name","Segment","City","State","Country","Region","Market","Product ID","Product Name","Sub-Category","Category","Sales","Quantity","Discount","Profit","Shipping Cost","Order Priority"})
 				in
-					ChangedTypes
+				    Cleaned
 
 	annotation PBI_ResultType = Table
+

@@ -1,0 +1,71 @@
+table SchedulePlan
+	lineageTag: 9922b846-65e7-5c59-88af-fd44f9eef517
+
+	column 'ID'
+		dataType: string
+		lineageTag: 3f595204-8d15-50f4-a487-e5517d6bed2f
+		summarizeBy: none
+		sourceColumn: [ID]
+
+	column 'Report'
+		dataType: string
+		lineageTag: 53d398fd-3aae-508a-ad2d-751894dc83ac
+		summarizeBy: none
+		sourceColumn: [Report]
+
+	column 'Intended Users'
+		dataType: string
+		lineageTag: 79744036-ca13-5cad-9a9c-083373bfcad3
+		summarizeBy: none
+		sourceColumn: [Intended Users]
+
+	column 'Frequency'
+		dataType: string
+		lineageTag: 72bae232-5b8a-55e2-b1e9-cfcc842529f1
+		summarizeBy: none
+		sourceColumn: [Frequency]
+
+	column 'Delivery Time'
+		dataType: string
+		lineageTag: 887df7bf-6eb7-5bdd-aad3-2c3a22a5c30e
+		summarizeBy: none
+		sourceColumn: [Delivery Time]
+
+	column 'Delivery Method'
+		dataType: string
+		lineageTag: 6241e681-077d-53d3-8e40-673e04df652c
+		summarizeBy: none
+		sourceColumn: [Delivery Method]
+
+	column 'Report Owner'
+		dataType: string
+		lineageTag: f7573ead-c846-5cfd-8af4-2801ba0d4234
+		summarizeBy: none
+		sourceColumn: [Report Owner]
+
+	measure 'Scheduled Reports' = COUNTROWS(SchedulePlan)
+		formatString: 0
+		displayFolder: Measures
+		lineageTag: 7c4da514-c423-56b9-bee5-ecaaf83e83e7
+
+	partition SchedulePlan = calculated
+		mode: import
+		source =
+				DATATABLE(
+				"ID", STRING,
+				"Report", STRING,
+				"Intended Users", STRING,
+				"Frequency", STRING,
+				"Delivery Time", STRING,
+				"Delivery Method", STRING,
+				"Report Owner", STRING,
+				{
+				{"R1","Daily Sales Report","Sales Managers, Regional Heads","Daily","07:00 AM","Email subscription (PDF) + Power BI Service","Sales Operations"},
+				{"R2","Weekly Profit Report","Finance Team, Regional Heads","Weekly","Monday 08:00 AM","Email subscription (PDF) + Shared Workspace","Finance Analyst"},
+				{"R3","Monthly Executive Dashboard","CEO, CFO, Regional VPs","Monthly","1st working day 09:00 AM","Email (PDF) + Power BI Service App","BI Lead"},
+				{"R4","Weekly Returns Monitor","Logistics and Customer Service","Weekly","Tuesday 09:00 AM","Shared Workspace + Email link","Operations Manager"},
+				{"R5","Daily KPI Alert Digest","Regional Heads, BI Operations","Daily","07:30 AM","Power BI Service alert + Email","BI Operations Engineer"},
+				{"R6","Dataset Scheduled Refresh","BI Operations Team","Daily","06:00 AM","Scheduled refresh via data gateway","BI Operations Engineer"}
+				})
+
+	annotation PBI_ResultType = Table

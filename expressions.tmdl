@@ -1,4 +1,3 @@
-expression DataFolderPath = "C:\Experiment7_PowerBI\Data\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
-	lineageTag: 41ce0bca-caac-53e4-84b7-9325cac35ad2
-
-	annotation PBI_ResultType = Text
+expression FilePath = "C:\BI_Lab\Exp8\Global_Superstore_2018.xlsx" meta [IsParameterQueryRequired=true, Type="Text", IsParameterQuery=true]
+	lineageTag: 5353cc5f-981a-52b9-af53-8a260568c320
+	queryGroup: Parameters

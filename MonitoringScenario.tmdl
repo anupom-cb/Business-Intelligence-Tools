@@ -1,0 +1,44 @@
+table MonitoringScenario
+	lineageTag: 1a450d2c-b564-5566-b39a-68cec484d6c8
+
+	column 'Stage'
+		dataType: string
+		lineageTag: 30adfd00-f6ba-5885-a03e-40f19c0181a3
+		summarizeBy: none
+		sourceColumn: [Stage]
+
+	column 'Observation / Trigger'
+		dataType: string
+		lineageTag: 0ffd4d17-d0e5-5dfb-8094-bd4da5a411a3
+		summarizeBy: none
+		sourceColumn: [Observation / Trigger]
+
+	column 'Recipients'
+		dataType: string
+		lineageTag: 88dff880-f39e-58fc-a6a4-605c9efdae4b
+		summarizeBy: none
+		sourceColumn: [Recipients]
+
+	column 'Corrective Action'
+		dataType: string
+		lineageTag: 815c51f0-bce2-5f29-ac3d-35bb5cfc2f10
+		summarizeBy: none
+		sourceColumn: [Corrective Action]
+
+	partition MonitoringScenario = calculated
+		mode: import
+		source =
+				DATATABLE(
+				"Stage", STRING,
+				"Observation / Trigger", STRING,
+				"Recipients", STRING,
+				"Corrective Action", STRING,
+				{
+				{"1. Detect","Region profit margin falls below 10% (A1) - e.g. Western Asia shows a negative margin","Regional Head, Finance Manager","Open Monitoring page and filter on the affected region"},
+				{"2. Diagnose","Drill Region > State > City and Category > Sub-Category to find loss-making segments","BI Analyst","Identify high-discount, high-shipping-cost products"},
+				{"3. Escalate","Sales decline above 15% (A2) or returns up above 20% (A3) also fires for the region","Sales Manager, Operations Manager","Convene weekly review with regional branch"},
+				{"4. Correct","Reduce discounts, renegotiate shipping, review pricing and product mix","Regional Head","Track improvement in the next Weekly Profit Report"},
+				{"5. Verify","Margin returns to 10% or above and alert clears in Power BI Service","BI Operations Engineer","Document result in Monitoring and Recommendation Report"}
+				})
+
+	annotation PBI_ResultType = Table

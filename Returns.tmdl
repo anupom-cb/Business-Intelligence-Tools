@@ -1,0 +1,33 @@
+table Returns
+	lineageTag: 14813434-5189-5578-8919-2b166f764cf2
+
+	column 'Returned'
+		dataType: string
+		lineageTag: 1ad3ccb7-143d-5239-b9f3-69a7770ae653
+		summarizeBy: none
+		sourceColumn: Returned
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 4da8a8d5-78ff-54f4-8c43-3f6c1d05c04b
+		summarizeBy: none
+		sourceColumn: Order ID
+
+	column 'Region'
+		dataType: string
+		lineageTag: 30133a3d-ae44-5b23-b1dd-42450eb37e5d
+		summarizeBy: none
+		sourceColumn: Region
+
+	partition Returns = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(FilePath), null, true),
+				    Sheet = Source{[Item="Returns",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Returned", type text},{"Order ID", type text},{"Region", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

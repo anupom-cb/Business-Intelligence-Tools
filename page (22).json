@@ -1,7 +1,7 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
-  "name": "d64fcdbcecda500a8d09",
-  "displayName": "Advanced Analytics",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json",
+  "name": "33587ab96be95ad4a",
+  "displayName": "A. Scheduled Reporting Plan",
   "displayOption": "FitToPage",
   "height": 720,
   "width": 1280,
@@ -14,7 +14,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#EEF1F5'"
+                    "Value": "'#EEF3FB'"
                   }
                 }
               }

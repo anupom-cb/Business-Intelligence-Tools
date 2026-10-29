@@ -1,54 +1,73 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
-  "name": "b86a5d7142d6553fbd07",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "27e28827189856848",
   "position": {
-    "x": 1110,
-    "y": 6,
-    "z": 0,
-    "height": 52,
-    "width": 150,
-    "tabOrder": 0
+    "x": 20,
+    "y": 483,
+    "z": 140,
+    "height": 227,
+    "width": 300,
+    "tabOrder": 140
   },
   "visual": {
-    "visualType": "slicer",
+    "visualType": "columnChart",
     "query": {
       "queryState": {
-        "Values": {
+        "Category": {
           "projections": [
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
+                      "Entity": "Calendar"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "Calendar.Year",
+              "nativeQueryRef": "Year",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
                       "Entity": "Orders"
                     }
                   },
-                  "Property": "Category"
+                  "Property": "Returned Orders"
                 }
               },
-              "queryRef": "Orders.Category",
-              "nativeQueryRef": "Category",
-              "active": true
+              "queryRef": "Orders.Returned Orders",
+              "nativeQueryRef": "Returned Orders"
             }
           ]
         }
       }
     },
+    "drillFilterOtherVisuals": true,
     "objects": {
-      "data": [
+      "dataPoint": [
         {
           "properties": {
-            "mode": {
+            "showAllDataPoints": {
               "expr": {
                 "Literal": {
-                  "Value": "'Dropdown'"
+                  "Value": "true"
                 }
               }
             }
           }
         }
       ],
-      "header": [
+      "labels": [
         {
           "properties": {
             "show": {
@@ -58,17 +77,21 @@
                 }
               }
             },
-            "fontSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "10D"
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#374151'"
+                    }
+                  }
                 }
               }
             },
-            "bold": {
+            "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "9D"
                 }
               }
             }
@@ -123,7 +146,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#D9DEE5'"
+                      "Value": "'#D6E0F0'"
                     }
                   }
                 }
@@ -132,19 +155,78 @@
             "radius": {
               "expr": {
                 "Literal": {
-                  "Value": "6D"
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "preset": {
+              "expr": {
+                "Literal": {
+                  "Value": "'BottomRight'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Returned Orders by Year'"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1E3A8A'"
+                    }
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "13D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
                 }
               }
             }
           }
         }
       ]
-    },
-    "drillFilterOtherVisuals": true,
-    "syncGroup": {
-      "groupName": "Category",
-      "fieldChanges": true,
-      "filterChanges": true
     }
   }
 }
