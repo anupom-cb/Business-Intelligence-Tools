@@ -1,0 +1,8 @@
+relationship 6afccdfe-6277-5a03-a696-25c0b530addb
+	fromColumn: Orders.'Order Date'
+	toColumn: Calendar.Date
+
+relationship 3e1dc90b-f366-5650-bce0-6cec82e39b92
+	fromColumn: Orders.Region
+	toColumn: People.Region
+

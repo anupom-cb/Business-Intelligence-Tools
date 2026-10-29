@@ -1,0 +1,79 @@
+table Calendar
+	dataCategory: Time
+	lineageTag: bea093d0-0d86-5184-be32-28e3bfd22e32
+
+	column 'Date'
+		dataType: dateTime
+		formatString: dd-mmm-yyyy
+		lineageTag: c0490118-a4de-5a5e-a502-e96596f5ea05
+		summarizeBy: none
+		sourceColumn: [Date]
+		isKey
+
+	column 'Year'
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d0af9f3-a2bd-5109-9917-f6f286cf97c0
+		summarizeBy: none
+		sourceColumn: [Year]
+
+	column 'Quarter'
+		dataType: string
+		lineageTag: c92395ec-89f8-52dd-aa1e-c4e6d1cfa0c4
+		summarizeBy: none
+		sourceColumn: [Quarter]
+
+	column 'Month No'
+		dataType: int64
+		formatString: 0
+		lineageTag: 721ab0b2-e474-5f94-b9f9-2817f87fadcc
+		summarizeBy: none
+		sourceColumn: [Month No]
+
+	column 'Month'
+		dataType: string
+		lineageTag: 91f11f20-f5bc-5886-963e-9202f1d54536
+		summarizeBy: none
+		sourceColumn: [Month]
+		sortByColumn: 'Month No'
+
+	column 'Year-Month'
+		dataType: string
+		lineageTag: 90488ae4-d8cf-586f-8d85-d8d805c4e8e1
+		summarizeBy: none
+		sourceColumn: [Year-Month]
+		sortByColumn: 'Year-Month No'
+
+	column 'Year-Month No'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b6557bf-6345-57ba-9254-47244efa2669
+		summarizeBy: none
+		sourceColumn: [Year-Month No]
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: 41fa2b77-0c56-526a-a50c-5d35218dd8a5
+		level Year
+			lineageTag: a40a7e57-4c4d-51b7-9e3e-a7b972231f5c
+			column: Year
+		level Quarter
+			lineageTag: d5d04142-7e2c-53df-ac95-7ff699b875b9
+			column: Quarter
+		level Month
+			lineageTag: 6e7740e0-23e2-5228-9742-8e8604b06baf
+			column: Month
+
+	partition Calendar = calculated
+		mode: import
+		source =
+				ADDCOLUMNS(
+				    CALENDAR(DATE(YEAR(MIN(Orders[Order Date])),1,1), DATE(YEAR(MAX(Orders[Order Date])),12,31)),
+				    "Year", YEAR([Date]),
+				    "Quarter", "Q" & QUARTER([Date]),
+				    "Month No", MONTH([Date]),
+				    "Month", FORMAT([Date],"MMM"),
+				    "Year-Month", FORMAT([Date],"yyyy-MM"),
+				    "Year-Month No", YEAR([Date])*100 + MONTH([Date])
+				)
+
+	annotation PBI_ResultType = Table

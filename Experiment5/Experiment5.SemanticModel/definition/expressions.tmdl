@@ -1,0 +1,3 @@
+expression FilePath = "C:\BI_Lab\Exp5\Global_Superstore_2018.xlsx" meta [IsParameterQueryRequired=true, Type="Text", IsParameterQuery=true]
+	lineageTag: 5353cc5f-981a-52b9-af53-8a260568c320
+	queryGroup: Parameters

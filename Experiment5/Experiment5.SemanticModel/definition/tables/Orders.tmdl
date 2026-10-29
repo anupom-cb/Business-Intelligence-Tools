@@ -1,0 +1,257 @@
+table Orders
+	lineageTag: c7daf05e-28fe-53ad-bb11-fa285ecde43f
+
+	column 'Row ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: bbe9bcf4-860d-547d-a67b-0abe5e0ba4da
+		summarizeBy: none
+		sourceColumn: Row ID
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 4da8a8d5-78ff-54f4-8c43-3f6c1d05c04b
+		summarizeBy: none
+		sourceColumn: Order ID
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: dd-mmm-yyyy
+		lineageTag: 066f44ce-3ade-5383-b9e2-408dfa75de10
+		summarizeBy: none
+		sourceColumn: Order Date
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: dd-mmm-yyyy
+		lineageTag: d0330623-982c-5ff1-a0a6-e8950d8dce83
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: 906dd770-ecca-5d98-a266-29da868a9d36
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 7cd3735e-cbb5-5a42-9a20-ea4310d51ebf
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+	column 'Customer Name'
+		dataType: string
+		lineageTag: 90c5b268-5049-54eb-9813-fcb0fe7dce1e
+		summarizeBy: none
+		sourceColumn: Customer Name
+
+	column 'Segment'
+		dataType: string
+		lineageTag: cf0e5f71-2bec-5523-9c12-4c012e869291
+		summarizeBy: none
+		sourceColumn: Segment
+
+	column 'City'
+		dataType: string
+		lineageTag: a0f1500a-0c30-5b3a-918f-fb701232d8df
+		summarizeBy: none
+		sourceColumn: City
+
+	column 'State'
+		dataType: string
+		lineageTag: d7df32b6-6b33-56f7-832e-3612ffa28738
+		summarizeBy: none
+		sourceColumn: State
+
+	column 'Country'
+		dataType: string
+		lineageTag: ff5f69fc-b60a-5e01-af5e-08f2a94eb3cf
+		summarizeBy: none
+		sourceColumn: Country
+
+	column 'Region'
+		dataType: string
+		lineageTag: 30133a3d-ae44-5b23-b1dd-42450eb37e5d
+		summarizeBy: none
+		sourceColumn: Region
+
+	column 'Market'
+		dataType: string
+		lineageTag: 4d8fd067-8153-598b-a3ee-17e06c5b2359
+		summarizeBy: none
+		sourceColumn: Market
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 4b65536b-d97e-5a4c-b4cf-79ec944c92e8
+		summarizeBy: none
+		sourceColumn: Product ID
+
+	column 'Product Name'
+		dataType: string
+		lineageTag: 19aa4240-6ce3-5567-b293-3da93b0aee33
+		summarizeBy: none
+		sourceColumn: Product Name
+
+	column 'Sub-Category'
+		dataType: string
+		lineageTag: 27e3c2ef-9d7e-55b7-8706-8bbfb838e14e
+		summarizeBy: none
+		sourceColumn: Sub-Category
+
+	column 'Category'
+		dataType: string
+		lineageTag: 2e1be350-2d3d-5187-a466-ceb5213136ad
+		summarizeBy: none
+		sourceColumn: Category
+
+	column 'Sales'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 47c031b8-3e7a-569c-a1da-5b907b1bc9f7
+		summarizeBy: sum
+		sourceColumn: Sales
+
+	column 'Quantity'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 031f0b24-feb3-5c3f-bb4e-d02c1c1e2072
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+	column 'Discount'
+		dataType: double
+		formatString: 0%
+		lineageTag: 61d85196-a02d-5a73-9b84-b097c90358a8
+		summarizeBy: none
+		sourceColumn: Discount
+
+	column 'Profit'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 152a6ad2-66d8-5ccd-bd87-aa6f476e0cc6
+		summarizeBy: sum
+		sourceColumn: Profit
+
+	column 'Shipping Cost'
+		dataType: double
+		formatString: \$#,0.00
+		lineageTag: 16240bbb-7b4a-5801-b517-35be1349a68e
+		summarizeBy: sum
+		sourceColumn: Shipping Cost
+
+	column 'Order Priority'
+		dataType: string
+		lineageTag: f02e78f2-503f-5541-83a2-0578a4a2bd38
+		summarizeBy: none
+		sourceColumn: Order Priority
+
+	measure 'Total Sales' = SUM(Orders[Sales])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: deb4b805-c5a2-5a1a-9f76-91d26d71f4d6
+
+	measure 'Total Profit' = SUM(Orders[Profit])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: 2a0f587d-c613-5734-b37c-830714f7caec
+
+	measure 'Total Quantity' = SUM(Orders[Quantity])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: b903063d-d3a3-5781-801f-cc26ae3a0fed
+
+	measure 'Total Orders' = DISTINCTCOUNT(Orders[Order ID])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: da5934ef-b963-55cf-9db2-913b17245ffe
+
+	measure 'Total Customers' = DISTINCTCOUNT(Orders[Customer ID])
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: 45ef1a16-328b-51a9-b2bd-f4bb087a5176
+
+	measure 'Profit Margin %' = DIVIDE([Total Profit],[Total Sales])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: 063e1d2a-c6bf-5951-a13d-37dd349b38dd
+
+	measure 'Avg Discount %' = AVERAGE(Orders[Discount])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: d86d5cf6-9795-51da-8acb-ab91f2be987d
+
+	measure 'Avg Order Value' = DIVIDE([Total Sales],[Total Orders])
+		formatString: \$#,0.00
+		displayFolder: Measures
+		lineageTag: a6365d70-3d61-5f88-b27d-c211cab6da2b
+
+	measure 'Total Shipping Cost' = SUM(Orders[Shipping Cost])
+		formatString: \$#,0
+		displayFolder: Measures
+		lineageTag: a27330d5-66ae-5ce0-8731-8beac53587f6
+
+	measure 'Sales PY' = CALCULATE([Total Sales],SAMEPERIODLASTYEAR('Calendar'[Date]))
+		formatString: \$#,0
+		displayFolder: Time Intelligence
+		lineageTag: cc364c5d-056c-55c4-9ea9-3898a35ce548
+
+	measure 'Sales YoY %' = DIVIDE([Total Sales]-[Sales PY],[Sales PY])
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: c9600ee5-a695-5852-8fb5-77286029c7a9
+
+	measure 'Returned Orders' = CALCULATE(DISTINCTCOUNT(Orders[Order ID]),TREATAS(VALUES(Returns[Order ID]),Orders[Order ID]))
+		formatString: #,0
+		displayFolder: Measures
+		lineageTag: 62b7c3af-e2c7-527e-b587-a8eaae4215ba
+
+	measure 'Return Rate %' = DIVIDE([Returned Orders],[Total Orders])
+		formatString: 0.0%
+		displayFolder: Measures
+		lineageTag: 4e05f790-6a50-53d7-856a-ceab3b7061d9
+
+	measure 'Top 10 Customer Sales' = VAR r = RANKX(ALLSELECTED(Orders[Customer Name]),[Total Sales],,DESC,Dense) RETURN IF(r<=10,[Total Sales])
+		formatString: \$#,0
+		displayFolder: Ranking
+		lineageTag: d166e688-2c34-56ba-bb34-02be252ff1d6
+
+	hierarchy Geography
+		lineageTag: 0e6dd03b-5295-5c28-951a-7d779745c05d
+		level Region
+			lineageTag: 30d42f19-7e4b-5d98-b8db-d600ca6ca472
+			column: Region
+		level State
+			lineageTag: 146dfb18-e019-5452-a5bd-d849a9a9a594
+			column: State
+		level City
+			lineageTag: ee5deda4-7787-5ef3-9204-cbc925cbde77
+			column: City
+
+	hierarchy 'Product Hierarchy'
+		lineageTag: 113b7782-99d4-5bcc-8429-dea377e8b85a
+		level Category
+			lineageTag: e00dcbd6-facc-5d2d-9da1-eee11a20fe71
+			column: Category
+		level 'Sub-Category'
+			lineageTag: 0bd1a01d-44b5-5859-9c79-d5e33a584f0a
+			column: 'Sub-Category'
+		level 'Product Name'
+			lineageTag: ec3c02d1-7fc3-5f3e-9829-69022ee62e02
+			column: 'Product Name'
+
+	partition Orders = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(FilePath), null, true),
+				    OrdersSheet = Source{[Item="Orders",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(OrdersSheet, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Row ID", Int64.Type},{"Order ID", type text},{"Order Date", type datetime},{"Ship Date", type datetime},{"Ship Mode", type text},{"Customer ID", type text},{"Customer Name", type text},{"Segment", type text},{"City", type text},{"State", type text},{"Country", type text},{"Region", type text},{"Market", type text},{"Product ID", type text},{"Product Name", type text},{"Sub-Category", type text},{"Category", type text},{"Sales", type number},{"Quantity", Int64.Type},{"Discount", type number},{"Profit", type number},{"Shipping Cost", type number},{"Order Priority", type text}}),
+				    Cleaned = Table.SelectColumns(Typed, {"Row ID","Order ID","Order Date","Ship Date","Ship Mode","Customer ID","Customer Name","Segment","City","State","Country","Region","Market","Product ID","Product Name","Sub-Category","Category","Sales","Quantity","Discount","Profit","Shipping Cost","Order Priority"})
+				in
+				    Cleaned
+
+	annotation PBI_ResultType = Table
+

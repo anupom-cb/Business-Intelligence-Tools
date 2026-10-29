@@ -1,0 +1,27 @@
+table People
+	lineageTag: 7e1c9da4-aa86-59ce-bf33-cbfb00010f1f
+
+	column 'Person'
+		dataType: string
+		lineageTag: 35a21e47-a531-538d-b630-0571eddd12e4
+		summarizeBy: none
+		sourceColumn: Person
+
+	column 'Region'
+		dataType: string
+		lineageTag: 30133a3d-ae44-5b23-b1dd-42450eb37e5d
+		summarizeBy: none
+		sourceColumn: Region
+
+	partition People = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents(FilePath), null, true),
+				    Sheet = Source{[Item="People",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Sheet, [PromoteAllScalars=true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"Person", type text},{"Region", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table
